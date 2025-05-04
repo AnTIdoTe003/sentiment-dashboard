@@ -15,10 +15,10 @@ export async function GET(request: NextRequest) {
     }
 
     const reviews = await response.json()
-
     // Analyze sentiment for each review
     const analyzedReviews = await Promise.all(
       reviews.data.map(async (review: Review) => {
+
         const sentiment = await analyzeSentiment(review.guest_review_of_host)
         return {
           ...review,

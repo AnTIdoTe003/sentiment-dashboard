@@ -3,7 +3,7 @@ export interface Villa {
   name: string
 }
 
-// Sample villa data - in a real app, you would fetch this from an API
+
 export const villas: Villa[] = [
   { id: "WmvCnnB5IhJAwxZ4", name: "Villa Oceana" },
   { id: "LkPq7mR2sXyZvBn9", name: "Mountain Retreat" },

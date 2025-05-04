@@ -12,13 +12,14 @@ import Header from "@/components/header"
 import { LoadingOverlay } from "@/components/loading-overlay"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { AlertCircle } from "lucide-react"
+import axios from "axios"
 
 export default function Home() {
   const [reviews, setReviews] = useState<ReviewWithSentiment[]>([])
   const [loading, setLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [currentVillaId, setCurrentVillaId] = useState<string>("WmvCnnB5IhJAwxZ4")
+  const [currentVillaId, setCurrentVillaId] = useState<string>("")
 
   const fetchReviews = async (villaId: string) => {
     try {
@@ -31,16 +32,15 @@ export default function Home() {
         setRefreshing(true)
       }
 
-      const response = await fetch(`https://go.saffronstays.com/api/listing-reviews?id=${villaId}`)
+      const response = await axios.get(`/api/reviews`, {
+        params: { id: villaId }
+      })
 
-      if (!response.ok) {
-        throw new Error("Failed to fetch reviews")
-      }
-
-      const data = await response.json()
-      if (data?.success) {
-        const validReviews = Array.isArray(data.data)
-          ? data.data.filter(
+      const data = response.data
+      console.log("data", data.length)
+      if (data) {
+        const validReviews = Array.isArray(data)
+          ? data.filter(
               (review: { sentiment: { sentiment: any; score: any } }): review is ReviewWithSentiment =>
                 review &&
                 typeof review === "object" &&
@@ -49,18 +49,18 @@ export default function Home() {
                 typeof review.sentiment.score === "number"
             )
           : []
-        
+
         setReviews(validReviews)
       }
     } catch (err) {
       setError("Error loading reviews. Please try again later.")
-      console.error(err)
+      console.error("Axios error:", err)
     } finally {
       setLoading(false)
       setRefreshing(false)
     }
   }
-  console.log("reviews", reviews)
+console.log(reviews.length)
   useEffect(() => {
     fetchReviews(currentVillaId)
   }, [currentVillaId])

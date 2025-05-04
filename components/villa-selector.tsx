@@ -32,7 +32,7 @@ const VillaSelector = ({ onVillaChange }: VillaSelectorProps) => {
   const [selectedVilla, setSelectedVilla] = useState<VillaResponse>();
   const [villas, setVillas] = useState<VillaResponse[]>([]);
   const [search, setSearch] = useState<string>('');
-  console.log('selected', selectedVilla);
+
   const fetchVillas = async () => {
     const response = await fetch(
       `https://go.saffronstays.com/api/auto-complete?text=${search}&type=listing`,

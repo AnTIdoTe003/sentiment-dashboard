@@ -7,7 +7,7 @@ interface SummaryCardsProps {
 }
 
 export function SummaryCards({ reviews }: SummaryCardsProps) {
-  // Calculate average rating
+
   const totalRating = reviews.reduce((sum, review) => sum + Number.parseInt(review.guest_overall_rating), 0)
   const averageRating = reviews.length > 0 ? totalRating / reviews.length : 0
 
